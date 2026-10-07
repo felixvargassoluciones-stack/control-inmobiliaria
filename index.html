@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>InmoScript - Control Inmobiliario</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- BARRA SUPERIOR DE IDENTIDAD (MÉTODO ADHERENTE MAESTRO) -->
+    <header class="navbar">
+        <div class="nav-container">
+            <h1 class="logo">🏢 InmoScript Inmobiliaria</h1>
+            <span class="usuario-badge">👤 Administrator Activo</span>
+        </div>
+    </header>
+    <!-- MENÚ DE NAVEGACIÓN PRINCIPAL (MÉTODO ADHERENTE MAESTRO) -->
+    <nav class="menu-principal">
+        <div class="menu-container">
+            <button class="btn-menu active" id="btn-tab-dashboard">📊 Inicio</button>
+            <button class="btn-menu" id="btn-tab-fraccionamientos">🏙️ Fraccionamientos</button>
+            <button class="btn-menu" id="btn-tab-viviendas">🏡 Viviendas</button>
+            <button class="btn-menu" id="btn-tab-arrendados">👤 Arrendados</button>
+            <button class="btn-menu" id="btn-tab-inventarios">📋 Inventarios</button>
+            <button class="btn-menu" id="btn-tab-reportes">📄 Reportes PDF</button>
+            <button class="btn-menu" id="btn-tab-cobros">💰 Cobros y Servicios</button>
+        </div>
+    </nav>
+    <main class="contenedor-principal-wide">
+        <!-- ==========================================
+             PANTALLA 0: DASHBOARD / INICIO CON ACCESOS DE COLOR
+             ========================================== -->
+        <section id="tab-dashboard" class="seccion-modulo">
+            <div class="tarjeta-bienvenida">
+                <h2>¡Bienvenido al Control Administrativo de tu Inmobiliaria!</h2>
+                <p>Usa la barra de navegación superior o presiona directamente los accesos directos de abajo para operar el sistema.</p>
+                
+                <div class="tarjetas-resumen-inicio">
+                    <div class="resumen-item blue" id="dash-fraccionamientos">
+                        <h3>🏙️ Fraccionamientos</h3>
+                        <p>Gestión de complexes y zonas.</p>
+                    </div>
+                    <div class="resumen-item green" id="dash-viviendas">
+                        <h3>🏡 Viviendas</h3>
+                        <p>Inventario de propiedades y fichas.</p>
+                    </div>
+                    <div class="resumen-item purple" id="dash-arrendados">
+                        <h3>👤 Arrendados</h3>
+                        <p>Control de contratos e inquilinos.</p>
+                    </div>
+                    <div class="resumen-item orange" id="dash-inventarios" style="border-top: 4px solid #14b8a6;">
+                        <h3>📋 Inventarios</h3>
+                        <p>Evidencias fotográficas y auditoría local.</p>
+                    </div>
+                    <div class="resumen-item orange" id="dash-reportes" style="border-top: 4px solid #ef4444;">
+                        <h3>📄 Reportes PDF</h3>
+                        <p>Filtros de auditoría e impresión contable.</p>
+                    </div>
+                    <div class="resumen-item orange" id="dash-cobros">
+                        <h3>💰 Cobros</h3>
+                        <p>Servicios variables y estados en PDF.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- ==========================================
+             PANTALLA 1: MÓDULO DE FRACCIONAMIENTOS
+             ========================================== -->
+        <section id="tab-fraccionamientos" class="seccion-modulo hidden">
+            <div class="modulo-layout">
+                
+                <!-- FORMULARIO FIJO IZQUIERDO -->
+                <div class="tarjeta-blanca">
+                    <h2>🏙️ Registrar Fraccionamiento</h2>
+                    <form id="form-fraccionamiento">
+                        <div>
+                            <label>ID Fraccionamiento</label>
+                            <input type="text" id="inp-frac-id" required placeholder="Ej: FRAC-01">
+                        </div>
+                        <div>
+                            <label>Nombre del Fraccionamiento</label>
+                            <input type="text" id="inp-frac-nombre" required placeholder="Ej: Residencial Los Olivos">
+                        </div>
+                        <div>
+                            <label>Ciudad / Ubicación</label>
+                            <input type="text" id="inp-frac-ciudad" required placeholder="Ej: Querétaro">
+                        </div>
+                        <button type="submit" class="btn-guardar">💾 Guardar Fraccionamiento</button>
+                    </form>
+                </div>
+                <!-- LISTADO DERECHO CON SCROLL INDEPENDIENTE -->
+                <div class="columna-listado">
+                    <div class="encabezado-lista">
+                        <h2>📋 Catálogo de Fraccionamientos</h2>
+                        <span id="txt-contador-frac" class="contador-badge">0 Registrados</span>
+                    </div>
+                    <div id="lista-fraccionamientos" class="rejilla-tarjetas-simple">
+                        <div class="mensaje-vacio">Cargando base de datos...</div>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+        <!-- ==========================================
+             PANTALLA 2: MÓDULO DE VIVIENDAS
+             ========================================== -->
+        <section id="tab-viviendas" class="seccion-modulo hidden">
+            <div class="modulo-layout">
+                
+                <!-- FORMULARIO FIJO IZQUIERDO -->
+                <div class="tarjeta-blanca">
+                    <h2>🏡 Nueva Propiedad</h2>
+                    <form id="form-propiedad">
+                        <div style="margin-bottom: 14px;">
+                            <label>Asignar a Fraccionamiento</label>
+                            <select id="select-frac-vivienda" required></select>
+                        </div>
+                        <div class="grupo-doble">
+                            <div>
+                                <label>Código Propiedad</label>
+                                <input type="text" id="inp-codigo" required placeholder="Ej: VIV-102">
+                            </div>
+                            <div>
+                                <label>Estatus</label>
+                                <select id="sel-estatus">
+                                    <option value="Disponible">Disponible</option>
+                                    <option value="Rentada">Rentada</option>
+                                    <option value="Mantenimiento">Mantenimiento</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div>
+                            <label>Dirección Exacta</label>
+                            <input type="text" id="inp-direccion" required placeholder="Calle, número, manzana...">
+                        </div>
+                        <div class="grupo-doble">
+    <div>
+        <label>Monto Renta</label>
+        <input type="number" id="inp-renta" required placeholder="$0.00">
+    </div>
+    <div>
+        <label>Mantenimiento Base</label>
+        <input type="number" id="inp-mantenimiento" required placeholder="$0.00">
+    </div>
+</div>
+
+<!-- ========================================================================== -->
+<!-- NUEVA SECCIÓN MAESTRA UNIFICADA: DATOS DEL PROPIETARIO EN LÍNEAS SEPARADAS -->
+<!-- ========================================================================== -->
+<h3 style="margin-top: 20px; color: #b45309; border-bottom: 2px solid #ffedd5; padding-bottom: 6px;">💼 DATOS DEL PROPIETARIO / DUEÑO</h3>
+<div style="margin-bottom: 14px;">
+    <label>NOMBRE COMPLETO DEL DUEÑO</label>
+    <input type="text" id="inp-propietario-nombre" placeholder="Nombre completo del propietario" required>
+</div>
+<div style="margin-bottom: 14px;">
+    <label>CORREO ELECTRÓNICO DUEÑO</label>
+    <input type="email" id="inp-propietario-correo" placeholder="correo-dueno@ejemplo.com" required>
+</div>
+<div style="margin-bottom: 14px;">
+    <label>TELÉFONO / WHATSAPP DUEÑO</label>
+    <input type="tel" id="inp-propietario-telefono" placeholder="+52 55 1234 5678" required>
+</div>
+<!-- ========================================================================== -->
+
+
+<hr class="separador">
+<h3>Datos del Arrendado</h3>
+
+                        <div>
+                            <label>Nombre Completo</label>
+                            <input type="text" id="inp-inquilino" placeholder="Nombre del inquilino">
+                        </div>
+                        <div style="margin-bottom: 14px;">
+                            <label style="font-weight: 600; color: #4b5563; margin-bottom: 6px;">Correo Electrónico</label>
+                            <input type="email" id="inp-correo" placeholder="correo@ejemplo.com" style="width: 100%; padding: 10px 12px;">
+                        </div>
+                        <div>
+                            <label>Teléfono / WhatsApp</label>
+                            <input type="tel" id="inp-telefono" placeholder="+52 55 1234 5678">
+                        </div>
+                        <div>
+                            <label>Multimedia (Fachada / Videos)</label>
+                            <input type="file" id="inp-multimedia" multiple accept="image/*,video/*">
+                        </div>
+                        <hr class="separador">
+                        <h3>⚙️ Configuración Contractual de Cobros</h3>
+                        
+                        <div style="margin-bottom: 14px;">
+                            <label style="font-weight: 600; color: #4b5563; margin-bottom: 6px;">Fecha de Inicio de Contrato</label>
+                            <input type="date" id="inp-inicio-contrato" required style="width: 100%; padding: 9px 12px;">
+                        </div>
+
+                        <div class="grupo-contractual">
+                            <div>
+                                <label>Mantenimiento Base a cargo de:</label>
+                                <select id="sel-mantenimiento-resp" required>
+                                    <option value="Inquilino">Inquilino (Se le cobra aparte)</option>
+                                    <option value="Dueño">Dueño (Absorbido / Se le descuenta)</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label>Recibo de Agua a cargo de:</label>
+                                <select id="sel-agua-resp" required>
+                                    <option value="Inquilino">Inquilino (Se le cobra aparte)</option>
+                                    <option value="Dueño">Dueño (Absorbido / Se le descuenta)</option>
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <div style="margin-bottom: 14px;">
+                            <label>Recibo de Luz a cargo de:</label>
+                            <select id="sel-luz-resp" required>
+                                <option value="Inquilino">Inquilino (Se le cobra aparte)</option>
+                                <option value="Dueño">Dueño (Absorbido / Se le cobra al propietario)</option>
+                            </select>
+                        </div>
+
+                        <hr class="separador">
+                        <h3>💼 Comisión de la Inmobiliaria (Descuento al Dueño)</h3>
+
+                        <div class="grupo-contractual">
+                            <div>
+                                <label>Tipo de Comisión</label>
+                                <select id="sel-tipo-comision" required>
+                                    <option value="Porcentaje">Porcentaje (%)</option>
+                                    <option value="Monto Fijo">Monto Fijo ($)</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label>Valor / Cuota de Comisión</label>
+                                <input type="number" id="inp-valor-comision" required placeholder="Ej: 10 o 1500" min="0" step="0.01">
+                            </div>
+                        </div>
+
+                        <button type="submit" class="btn-guardar">💾 Guardar Propiedad</button>
+                    </form>
+                </div>
+                <!-- LISTADO DERECHO CON SCROLL INDEPENDIENTE -->
+                <div class="columna-listado">
+                    <div class="encabezado-lista">
+                        <h2>📋 Fichas del Fraccionamiento</h2>
+                        <div class="filtro-viviendas-box">
+                            <select id="select-fraccionamiento">
+                                <option value="">-- Selecciona Fraccionamiento --</option>
+                            </select>
+                        </div>
+                        <span id="txt-contador" class="contador-badge">0 Propiedades</span>
+                    </div>
+                    <div id="contenedor-tarjetas" class="rejilla-tarjetas">
+                        <div class="mensaje-vacio">Selecciona un fraccionamiento arriba para visualizar su catálogo contable.</div>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+        <!-- ==========================================
+             PANTALLA 2.5: MÓDULO DE INVENTARIOS (SESIONES CONTINUAS DE INSPECCIÓN)
+             ========================================== -->
+        <section id="tab-inventarios" class="seccion-modulo hidden">
+            <div class="modulo-layout">
+                
+                <!-- CUADRO FIJO IZQUIERDO: CONTROLES OPERATIVOS DE CAMPO -->
+                <div class="tarjeta-blanca">
+                    <h2>📋 Nuevo Inventario de Propiedad</h2>
+                    <form id="form-inventario">
+                        <div style="margin-bottom: 14px;">
+                            <label>Seleccionar Fraccionamiento</label>
+                            <select id="select-frac-inventario" required>
+                                <option value="">-- Selecciona Fraccionamiento --</option>
+                            </select>
+                        </div>
+
+                        <div style="margin-bottom: 14px;">
+                            <label>Seleccionar Vivienda</label>
+                            <select id="select-vivienda-inventario" required>
+                                <option value="">-- Primero elige un complejo --</option>
+                            </select>
+                        </div>
+                        
+                        <div style="margin-bottom: 14px;">
+                            <label>Tipo de Evento</label>
+                            <select id="sel-tipo-inventario" required>
+                                <option value="Entrega">Entrega (Inquilino Nuevo)</option>
+                                <option value="Recepcion">Recepción (Desocupación)</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label>Observaciones Generales</label>
+                            <textarea id="inp-observacion-inventario" placeholder="Ej: Detalle de pintura en sala, llaves completas..." rows="4" style="width: 100%; padding: 9px 12px; border: 1px solid #d1d5db; border-radius: 8px; font-size: 14px; outline: none; resize: vertical;"></textarea>
+                        </div>
+
+                        <hr class="separador">
+                        <h3>Evidencias Multimedia</h3>
+                        
+                        <div>
+                            <label>Capturar Foto / Video (Uno a uno)</label>
+                            <input type="file" id="inp-foto-inventario" accept="image/*,video/*">
+                        </div>
+                    </form>
+                </div>
+
+                <!-- CUADRO DERECHO: MESA DE AUDITORÍA CON BOTÓN SUPERIOR INTEGRADO AL ENCABEZADO -->
+                <div class="columna-listado">
+                    <div class="encabezado-lista" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; gap: 12px; position: sticky; top: 0; background: #f9fafb; padding-bottom: 10px; z-index: 15;">
+                        <h2>🔬 Mesa de Auditoría de Fotos</h2>
+                        <button type="submit" form="form-inventario" class="btn-guardar" style="background-color: #10b981; margin: 0; width: auto; padding: 8px 16px; font-size: 13px; border-radius: 8px; white-space: nowrap;">💾 Finalizar e Imprimir Inventario</button>
+                        <span id="txt-contador-fotos-inventario" class="contador-badge" style="white-space: nowrap;">0 Listas</span>
+                    </div>
+                    
+                    <div id="contenedor-auditoria-local" class="rejilla-tarjetas" style="flex: 1; padding-bottom: 20px;">
+                        <div class="mensaje-vacio">Toma o selecciona una foto a la izquierda para auditar su calidad en este espacio.</div>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+        <!-- ==========================================
+             PANTALLA 2.6: NUEVO MÓDULO DE CONSULTA Y REPORTES EN PDF
+             ========================================== -->
+        <section id="tab-reportes" class="seccion-modulo hidden">
+            <div class="modulo-layout">
+                <div class="tarjeta-blanca">
+                    <h2>🔍 Filtros de Búsqueda de Inventario</h2>
+                    <form id="form-filtros-reporte">
+                        <div style="margin-bottom: 14px;">
+                            <label>1. Filtrar por Fraccionamiento</label>
+                            <select id="select-frac-reporte" required>
+                                <option value="">-- Selecciona Fraccionamiento --</option>
+                            </select>
+                        </div>
+                        <div style="margin-bottom: 14px;">
+                            <label>2. Filtrar por Vivienda</label>
+                            <select id="select-vivienda-reporte">
+                                <option value="">-- Todas las Viviendas --</option>
+                            </select>
+                        </div>
+                        <div style="margin-bottom: 14px;">
+                            <label>3. Filtrar por Fecha Específica</label>
+                            <input type="date" id="inp-fecha-reporte">
+                        </div>
+                        <button type="button" id="btn-ejecutar-busqueda" class="btn-guardar" style="background-color: #3b82f6;">🔍 Buscar Evidencias</button>
+                    </form>
+                </div>
+                <div class="columna-listado">
+                    <div class="encabezado-lista" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; gap: 12px; position: sticky; top: 0; background: #f9fafb; padding-bottom: 10px; z-index: 15;">
+                        <h2>📋 Registros Encontrados en la Base</h2>
+                        <button id="btn-exportar-pdf-inventario" class="btn-guardar" style="background-color: #ef4444; margin: 0; width: auto; padding: 8px 16px; font-size: 13px; border-radius: 8px; white-space: nowrap;" disabled>📄 Exportar Reporte PDF</button>
+                        <span id="txt-contador-reportes" class="contador-badge" style="white-space: nowrap;">0 Encontrados</span>
+                    </div>
+                    <div id="contenedor-resultados-reporte" class="rejilla-tarjetas" style="flex: 1; padding-bottom: 20px;">
+                        <div class="mensaje-vacio">Aplica los filtros de la izquierda y presiona buscar para consultar el historial contable.</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+                <!-- ==========================================
+             PANTALLA 3: MÓDULO DE CONTRATOS (ARRENDADOS)
+             ========================================== -->
+        <section id="tab-arrendados" class="seccion-modulo hidden">
+            <div class="modulo-layout" style="grid-template-columns: 1fr;">
+                
+                <!-- COLUMNA ÚNICA DE LISTADO DE EXPEDIENTES LEGALES -->
+                <div class="columna-listado">
+                    <div class="encabezado-lista">
+                        <h2>👤 Directorio de Arrendados e Inquilinos Activos</h2>
+                        <span id="txt-contador-arrendados" class="contador-badge">0 Contratos</span>
+                    </div>
+                    
+                    <!-- CONTENEDOR DONDE LA IA INYECTARÁ LAS TARJETAS DINÁMICAS -->
+                    <div id="contenedor-tarjetas-arrendados" class="rejilla-tarjetas">
+                        <div class="mensaje-vacio">Cargando expedientes legales desde Google Sheets...</div>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- ==========================================
+             PANTALLA 4: MÓDULO DE SERVICIOS Y COBROS REESTRUCTURADO
+             ========================================== -->
+        <section id="tab-cobros" class="seccion-modulo hidden">
+            <div class="modulo-layout">
+                
+                <!-- FORMULARIO FIJO IZQUIERDO REESTRUCTURADO -->
+                <div class="tarjeta-blanca">
+                    <h2>💰 Registrar Movimiento Financiero</h2>
+                    <form id="form-cobros">
+                        <div style="margin-bottom: 14px;">
+                            <label>Seleccionar Fraccionamiento</label>
+                            <select id="select-frac-cobros" required>
+                                <option value="">-- Selecciona Fraccionamiento --</option>
+                            </select>
+                        </div>
+
+                        <div style="margin-bottom: 14px;">
+                            <label>Seleccionar Vivienda</label>
+                            <select id="select-vivienda-cobros" required>
+                                <option value="">-- Primero elige un complejo --</option>
+                            </select>
+                        </div>
+
+                        <hr class="separador">
+                        <h3>📋 Clasificación del Cargo</h3>
+
+                        <div class="grupo-contractual">
+                            <div>
+                                <label>Cuenta a Afectar (Destinatario):</label>
+                                <select id="sel-entidad-afectada" required>
+                                    <option value="Inquilino">👤 Inquilino (Cobranza de Adeudo)</option>
+                                    <option value="Dueño">💼 Propietario (Deducción / Retención)</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label>Periodo Contable (Mes / Año):</label>
+                                <input type="text" id="inp-periodo-cobros" required placeholder="Ej: Octubre 2026">
+                            </div>
+                        </div>
+
+                        <div class="grupo-contractual">
+                            <div>
+                                <label>Fecha Límite de Pago / Corte:</label>
+                                <input type="date" id="inp-limite-cobros" required>
+                            </div>
+                        </div>
+
+                       <hr class="separador">
+                        <h3>💲 Desglose de Importes (Solo Servicios Variables)</h3>
+
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 14px;">
+                            <div>
+                                <label style="font-weight: 600; color: #4b5563; margin-bottom: 6px;">Consumo Agua ($)</label>
+                                <input type="number" id="inp-agua-cobros" placeholder="0.00" step="0.01" style="width: 100%; padding: 9px 12px;">
+                            </div>
+                            <div>
+                                <label style="font-weight: 600; color: #4b5563; margin-bottom: 6px;">Consumo Luz ($)</label>
+                                <input type="number" id="inp-luz-cobros" placeholder="0.00" step="0.01" style="width: 100%; padding: 9px 12px;">
+                            </div>
+                        </div>
+
+                        <div class="grupo-contractual">
+                            <div>
+                                <label>Otros Gastos / Comisión ($)</label>
+                                <input type="number" id="inp-otros-cobros" placeholder="0.00" step="0.01">
+                            </div>
+                            <div>
+                                <label>Descripción u Observación del Movimiento</label>
+                                <textarea id="inp-concepto-otros" placeholder="Ej: Reparación de chapa o Comisión por Gestión" rows="2" style="width: 100%; padding: 9px 12px; border: 1px solid #d1d5db; border-radius: 8px; font-size: 14px; outline: none; resize: vertical; background-color: #fff;"></textarea>
+                            </div>
+                        </div>
+
+                        <!-- BLOQUE EXCLUSIVO: DEDUCCIONES AUTORIZADAS DEL INQUILINO (REESTRUCTURADO ABAJO Y MULTILÍNEA) -->
+                        <div id="bloque-deduccion-inquilino" class="hidden" style="background-color: #f8fafc; border: 1px dashed #cbd5e1; padding: 14px; border-radius: 8px; margin-top: 14px; margin-bottom: 14px;">
+                            <h4 style="font-size: 11px; text-transform: uppercase; color: #0284c7; letter-spacing: 0.5px; margin-bottom: 12px; font-weight: bold;">🔧 Deducción por Gasto / Reparación del Inquilino</h4>
+                            
+                            <div style="margin-bottom: 12px;">
+                                <label style="color: #0284c7;">Monto a Deducir de Renta ($)</label>
+                                <input type="number" id="inp-monto-deduccion" placeholder="0.00" step="0.01" style="width: 100%;">
+                            </div>
+                            
+                            <div style="margin-bottom: 14px;">
+                                <label style="color: #0284c7;">Descripción del Gasto de Reparación (Queda Abajo)</label>
+                                <textarea id="inp-concepto-deduccion" placeholder="Ej: Reparación integral de filtración de tuberías o mantenimiento de estufa..." rows="3" style="width: 100%; padding: 9px 12px; border: 1px solid #d1d5db; border-radius: 8px; font-size: 14px; outline: none; resize: vertical; background-color: #fff;"></textarea>
+                            </div>
+
+                            <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 0;">
+                                <input type="checkbox" id="chk-autorizado-dueno" style="width: auto; cursor: pointer;">
+                                <label for="chk-autorizado-dueno" style="text-transform: none; font-size: 12px; color: #1e293b; cursor: pointer; font-weight: 600;">
+                                    Confirmar que este gasto cuenta con la autorización expresa del propietario.
+                                </label>
+                            </div>
+                        </div>
+                        <button type="submit" class="btn-guardar" style="background-color: #3b82f6; margin-top: 14px;">💾 Registrar Movimiento Contable</button>
+                    </form>
+                </div>
+
+                <!-- LISTADO DERECHO CON SCROLL INDEPENDIENTE (PREPARADO PARA TARJETAS GEMELAS) -->
+                <div class="columna-listado">
+                    <div class="encabezado-lista">
+                        <h2>📋 Balance Financiero Inmobiliario</h2>
+                        <div class="filtro-viviendas-box">
+                            <select id="select-filtro-frac-cobros">
+                                <option value="">-- Filtrar Complejo Residencial --</option>
+                            </select>
+                        </div>
+                        <span id="txt-contador-cobros" class="contador-badge">0 Pendientes</span>
+                    </div>
+                    
+                    <div id="contenedor-tarjetas-cobros" class="rejilla-tarjetas">
+                        <div class="mensaje-vacio">Selecciona un fraccionamiento arriba para visualizar su estado de cuenta contable unificado.</div>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+    </main>
+
+    <!-- VENTANA DE CARGA GLOBAL (SPINNER MÓVIL) -->
+    <div id="modal-carga" class="modal hidden">
+        <div class="modal-contenido">
+            <div class="spinner"></div>
+            <p id="txt-modal-carga">Procesando con la base de datos de Google...</p>
+        </div>
+    </div>
+    <script src="app.js"></script>
+</body>
+</html>
